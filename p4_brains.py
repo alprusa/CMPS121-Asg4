@@ -47,12 +47,15 @@ class SlugBrain:
 
   def __init__(self, body):
     self.body = body
+    self.state = "idle"
+    self.target =None
 
 
   def handle_event(self, message, details):
     # TODO: IMPLEMENT THIS METHOD
     #  (Use helper methods and classes to keep your code organized where
     #  approprioate.)
+    #this is a test
     pass    
 
 world_specification = {
