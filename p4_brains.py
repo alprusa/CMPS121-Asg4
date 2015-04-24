@@ -47,6 +47,9 @@ class SlugBrain:
 
   def __init__(self, body):
     self.body = body
+    self.state = 'idle'
+    self.target = None
+    self.resource = False
 
 
   def handle_event(self, message, details):
@@ -54,8 +57,10 @@ class SlugBrain:
     #  (Use helper methods and classes to keep your code organized where
     #  approprioate.)
     #message commands - 'order', 'collide', 'timer'
-    print details
+    #detail are key commands/objects for collision
+    
     #idle 'i'
+    
     
     #attack 'a'
     
