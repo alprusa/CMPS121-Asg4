@@ -56,7 +56,6 @@ class SlugBrain:
     # TODO: IMPLEMENT THIS METHOD
     #  (Use helper methods and classes to keep your code organized where
     #  approprioate.)
-    #this is a test
     #message commands - 'order', 'collide', 'timer'
     #detail are key commands/objects for collision
     
