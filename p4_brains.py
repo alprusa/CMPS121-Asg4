@@ -55,7 +55,21 @@ class SlugBrain:
     # TODO: IMPLEMENT THIS METHOD
     #  (Use helper methods and classes to keep your code organized where
     #  approprioate.)
+<<<<<<< HEAD
     #this is a test
+=======
+    #message commands - 'order', 'collide', 'timer'
+    print details
+    #idle 'i'
+    
+    #attack 'a'
+    
+    #build 'b'
+    
+    #harvest 'h'
+    
+    #flee low health
+>>>>>>> origin/master
     pass    
 
 world_specification = {
