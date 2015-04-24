@@ -58,15 +58,18 @@ class SlugBrain:
     #this is a test
     #message commands - 'order', 'collide', 'timer'
     print details
+    #moving 'right click'
+    if self.state is "moving":
     #idle 'i'
-    
+    elif self.state is "idle":
     #attack 'a'
-    
+    elif self.state is "attacking":
     #build 'b'
-    
+    elif self.state is "building":
     #harvest 'h'
-    
+    elif self.state is "harvesting":    
     #flee low health
+    elif self.state is "fleeing":
     pass    
 
 world_specification = {
