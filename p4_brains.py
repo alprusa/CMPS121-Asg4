@@ -55,23 +55,40 @@ class SlugBrain:
   def handle_event(self, message, details):
     # TODO: IMPLEMENT THIS METHOD
     #  (Use helper methods and classes to keep your code organized where
-    #  approprioate.)
+    #  appropriate.)
     #message commands - 'order', 'collide', 'timer'
     #detail are key commands/objects for collision
     print details
+    
     #moving 'right click'
     if self.state is "moving":
+        pass
     #idle 'i'
     elif self.state is "idle":
+        pass
     #attack 'a'
     elif self.state is "attacking":
+        pass
     #build 'b'
     elif self.state is "building":
+        pass
     #harvest 'h'
-    elif self.state is "harvesting":    
+    elif self.state is "harvesting": 
+        pass
     #flee low health
     elif self.state is "fleeing":
-    pass    
+        pass    
+    
+  def do_right_click(details):
+      pass
+  def do_i(details):
+      pass
+  def do_a(details):
+      pass
+  def do_b(details):
+      pass
+  def do_h(details):
+      pass
 
 world_specification = {
   'worldgen_seed': 13, # comment-out to randomize
