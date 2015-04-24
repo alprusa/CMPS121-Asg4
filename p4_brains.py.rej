@@ -1,0 +1,9 @@
+diff a/p4_brains.py b/p4_brains.py	(rejected hunks)
+@@ -56,7 +56,6 @@
+     # TODO: IMPLEMENT THIS METHOD
+     #  (Use helper methods and classes to keep your code organized where
+     #  approprioate.)
+-    #this is a test
+     #message commands - 'order', 'collide', 'timer'
+     #detail are key commands/objects for collision
+     
