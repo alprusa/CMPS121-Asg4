@@ -47,8 +47,9 @@ class SlugBrain:
 
   def __init__(self, body):
     self.body = body
-    self.state = "idle"
-    self.target =None
+    self.state = 'idle'
+    self.target = None
+    self.resource = False
 
 
   def handle_event(self, message, details):
@@ -57,11 +58,19 @@ class SlugBrain:
     #  approprioate.)
     #this is a test
     #message commands - 'order', 'collide', 'timer'
+<<<<<<< HEAD
     print details
     #moving 'right click'
     if self.state is "moving":
     #idle 'i'
     elif self.state is "idle":
+=======
+    #detail are key commands/objects for collision
+    
+    #idle 'i'
+    
+    
+>>>>>>> origin/master
     #attack 'a'
     elif self.state is "attacking":
     #build 'b'
