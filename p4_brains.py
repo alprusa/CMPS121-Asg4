@@ -56,21 +56,13 @@ class SlugBrain:
     # TODO: IMPLEMENT THIS METHOD
     #  (Use helper methods and classes to keep your code organized where
     #  approprioate.)
-    #this is a test
     #message commands - 'order', 'collide', 'timer'
-<<<<<<< HEAD
+    #detail are key commands/objects for collision
     print details
     #moving 'right click'
     if self.state is "moving":
     #idle 'i'
     elif self.state is "idle":
-=======
-    #detail are key commands/objects for collision
-    
-    #idle 'i'
-    
-    
->>>>>>> origin/master
     #attack 'a'
     elif self.state is "attacking":
     #build 'b'
