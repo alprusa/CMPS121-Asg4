@@ -8,19 +8,24 @@ class MantisBrain:
     self.body = body
     self.state = 'idle'
     self.target = None
+    self.resource = False
 
   def handle_event(self, message, details):
 
     if self.state is 'idle':
 
-      if message == 'timer':
-        # go to a random point, wake up sometime in the next 10 seconds
-        world = self.body.world
-        x, y = random.random()*world.width, random.random()*world.height
-        self.body.go_to((x,y))
-        self.body.set_alarm(random.random()*10)
+        if message == 'timer':
+            if random.random() < 0.8:
+                # go to a random point, wake up sometime in the next 10 seconds
+                world = self.body.world
+                x, y = random.random()*world.width, random.random()*world.height
+                self.body.go_to((x,y))
+                self.body.set_alarm(random.random()*10)
+            else:
+                self.state = "thievery"
+                self.body.set_alarm(1)
 
-      elif message == 'collide' and details['what'] == 'Slug':
+    elif message == 'collide' and details['what'] == 'Slug':
         # a slug bumped into us; get curious
         self.state = 'curious'
         self.body.set_alarm(1) # think about this for a sec
@@ -36,13 +41,55 @@ class MantisBrain:
             self.body.stop()
             self.state = 'idle'
           else:
-            self.body.follow(self.target)
+            if self.target:
+                self.body.follow(self.target)
+            else:
+                self.body.stop()
           self.body.set_alarm(1)
       elif message == 'collide' and details['what'] == 'Slug':
         # we meet again!
         slug = details['who']
         slug.amount -= 0.01 # take a tiny little bite
-    
+        self.body.radius += 0.1
+        self.body.speed += 0.1
+        
+    elif self.state == "thievery":
+        if self.resource:
+            if message == "collide":
+                if details["what"] == "Resource":
+                    details["who"].amount += .15
+                    self.resource = False
+                if details["what"] == "Slug":
+                     # a slug bumped into us; get curious
+                     self.state = 'curious'
+                     self.body.set_alarm(1) # think about this for a sec
+                     self.body.stop()
+                     self.target = details['who']
+            elif message == "timer":
+                resource = self.body.find_nearest("Resource")
+                if resource:
+                    self.body.go_to(resource)
+                else:
+                    self.body.stop()
+                self.body.set_alarm(1)
+        else:
+            if message =="collide":
+                if details["what"] == "Nest":
+                    details["who"].amount -= .15
+                    self.resource = True
+                if details["what"] == "Slug":
+                     # a slug bumped into us; get curious
+                     self.state = 'curious'
+                     self.body.set_alarm(1) # think about this for a sec
+                     self.body.stop()
+                     self.target = details['who']
+            elif message == "timer":
+                nest = self.body.find_nearest("Nest")
+                if nest:
+                    self.body.go_to(nest)
+                else:
+                    self.body.stop()
+                self.body.set_alarm(1)
 class SlugBrain:
 
   def __init__(self, body):
@@ -60,24 +107,20 @@ class SlugBrain:
     
     if self.body.amount < 0.5:
         self.state = "fleeing"
-        self.body.go_to(self.body.find_nearest("Nest"))
+        nest = self.body.find_nearest("Nest")
+        if nest:
+            self.body.go_to(nest)
+        else:
+            self.body.stop()
       
     #moving 'right click'
     if self.state is "moving":
         if message is "order":
             self.do_order(details)
-        elif message is 'collide':
-            pass
-        elif message is "timer":
-            pass
     #idle 'i'
     elif self.state is "idle":
         if message is "order":
             self.do_order(details)
-        elif message is 'collide':
-            pass
-        elif message is "timer":
-            pass
     #attack 'a'
     elif self.state is "attacking":
         if message is "order":
@@ -88,7 +131,10 @@ class SlugBrain:
                 mantis.amount -= 0.05
         elif message is "timer":
             self.target = self.body.find_nearest("Mantis")
-            self.body.follow(self.target)
+            if self.target:
+                self.body.follow(self.target)
+            else:
+                self.body.stop()
             self.body.set_alarm(1)
     #build 'b'
     elif self.state is "building":
@@ -100,8 +146,11 @@ class SlugBrain:
                 nest.amount += 0.01
         elif message is "timer":
             self.target = self.body.find_nearest("Nest")
+            if self.target:
+                self.body.go_to(self.target)
+            else:
+                self.body.stop()
             self.body.set_alarm(1)
-            self.body.go_to(self.target)
     #harvest 'h'
     elif self.state is "harvesting": 
         if message is "order":
@@ -118,11 +167,17 @@ class SlugBrain:
         elif message is "timer":
             if self.resource:
                 self.target = self.body.find_nearest("Nest")
+                if self.target:
+                    self.body.go_to(self.target)
+                else:
+                    self.body.stop()
                 self.body.set_alarm(1)
-                self.body.go_to(self.target)
             else: #not carrying a resource
                 self.target = self.body.find_nearest("Resource")
-                self.body.go_to(self.target)
+                if self.target:
+                    self.body.go_to(self.target)
+                else:
+                    self.body.stop()
                 self.body.set_alarm(1)
     #flee low health
     elif self.state is "fleeing":

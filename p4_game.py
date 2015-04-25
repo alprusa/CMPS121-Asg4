@@ -291,7 +291,10 @@ class World:
     else:
       candidates = self.all_objects
 
-    return min(filter(where,candidates),key=lambda obj: field(obj.position))
+    if candidates:
+        return min(filter(where,candidates),key=lambda obj: field(obj.position))
+    else: 
+        return None
 
 
   def issue_selection_order(self, order):
