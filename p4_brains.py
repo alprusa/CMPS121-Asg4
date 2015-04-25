@@ -58,26 +58,98 @@ class SlugBrain:
     #message commands - 'order', 'collide', 'timer'
     #detail are key commands/objects for collision
     print details
+    print type(details)
     
+    if self.body.amount < 0.5:
+        self.state = "fleeing"
+        self.body.go_to(self.body.find_nearest("Nest"))
+      
     #moving 'right click'
     if self.state is "moving":
-        pass
+        if message is "order":
+            self.do_order(details)
+        elif message is 'collide':
+            pass
+        elif message is "timer":
+            pass
     #idle 'i'
     elif self.state is "idle":
-        pass
+        if message is "order":
+            self.do_order(details)
+        elif message is 'collide':
+            pass
+        elif message is "timer":
+            pass
     #attack 'a'
     elif self.state is "attacking":
-        pass
+        if message is "order":
+            self.do_order(details)
+        elif message is 'collide':
+            if details["what"] is "Mantis":
+                mantis = details["who"]
+                mantis.amount -= 0.05
+        elif message is "timer":
+            self.target = self.body.find_nearest("Mantis")
+            self.body.follow(self.target)
+            self.body.set_alarm(1)
     #build 'b'
     elif self.state is "building":
-        pass
+        if message is "order":
+            self.do_order(details)
+        elif message is 'collide':
+            if details["what"] == "Nest":
+                nest = details["who"]
+                nest.amount += 0.01
+        elif message is "timer":
+            self.target = self.body.find_nearest("Nest")
+            self.body.set_alarm(1)
+            self.body.go_to(self.target)
     #harvest 'h'
     elif self.state is "harvesting": 
-        pass
+        if message is "order":
+            self.do_order(details)
+        elif message is 'collide':
+            if self.resource:
+                if details["what"] == "Nest":
+                    self.resource = False
+            else: #not carrying a resource
+                if details["what"] == "Resource":
+                    resource = details["who"]
+                    resource.amount -= 0.25
+                    self.resource = True
+        elif message is "timer":
+            if self.resource:
+                self.target = self.body.find_nearest("Nest")
+                self.body.set_alarm(1)
+                self.body.go_to(self.target)
+            else: #not carrying a resource
+                self.target = self.body.find_nearest("Resource")
+                self.body.go_to(self.target)
+                self.body.set_alarm(1)
     #flee low health
     elif self.state is "fleeing":
-        pass    
+        if message is "order":
+            self.do_order(details)
+        if message is "collide":
+            if details["what"] == "Nest":
+                self.body.amount = 1    
     
+  def do_order(self, details): #chooses the correct command method
+        if details == 'i':
+            self.state = 'idle'
+            self.body.stop()
+        elif details == 'h':
+            self.state = 'harvesting'
+            self.body.set_alarm(0)
+        elif details == 'a':
+            self.state = 'attacking'
+            self.body.set_alarm(0)
+        elif details == 'b':
+            self.state = 'building'
+            self.body.set_alarm(0)
+        elif isinstance(details, tuple):
+            self.state = 'moving'
+            self.body.go_to(details)
   def do_right_click(details):
       pass
   def do_i(details):
@@ -90,7 +162,7 @@ class SlugBrain:
       pass
 
 world_specification = {
-  'worldgen_seed': 13, # comment-out to randomize
+  #'worldgen_seed': 13, # comment-out to randomize
   'nests': 2,
   'obstacles': 25,
   'resources': 5,
