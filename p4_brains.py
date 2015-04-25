@@ -57,8 +57,6 @@ class SlugBrain:
     #  approprioate.)
     #message commands - 'order', 'collide', 'timer'
     #detail are key commands/objects for collision
-    print details
-    print type(details)
     
     if self.body.amount < 0.5:
         self.state = "fleeing"
@@ -150,16 +148,6 @@ class SlugBrain:
         elif isinstance(details, tuple):
             self.state = 'moving'
             self.body.go_to(details)
-  def do_right_click(details):
-      pass
-  def do_i(details):
-      pass
-  def do_a(details):
-      pass
-  def do_b(details):
-      pass
-  def do_h(details):
-      pass
 
 world_specification = {
   #'worldgen_seed': 13, # comment-out to randomize
